@@ -1,18 +1,34 @@
-# Wine-Expert-Bot
 import telebot
 from telebot import types
 
+bot = telebot.TeleBot()
 
 
-@bot.message_handler(commands=['start'])
-def start(message):
+# @bot.message_handler(commands=['score'])
+# def score(message):
+#     markup3 = types.ReplyKeyboardMarkup()
+#     btn1 = types.InlineKeyboardButton("понравился")
+#     btn2 = types.InlineKeyboardButton("непонравился")
+#     markup3.row(btn1, btn2)
+#     bot.send_message(message.chat.id, 'Как тебе коктель? оцени "понравился" или "непонравился"', parse_mode=markup3)
+#     if message.text == 'понравился':
+#         bot.reply_to(message, "Вау! Я вижу что ты высокий ценитель, я запомню что тебе он  понраву.")
+#         # f = open('I remember', 'w')
+#
+#         # bot.send_message(message.chat.id, f)
+#     elif message.text == 'непонравился':
+#         bot.send_message(message.chat.id, 'жаль')
+
+
+@bot.message_handler(commands=['go', 'start'])
+def go(message):
     markup = types.ReplyKeyboardMarkup()  # водим клавиатуру в функцию
     btn1 = types.InlineKeyboardButton("Да")  # создаём кнопку
     btn2 = types.InlineKeyboardButton("Нет")  # создаём кнопку
     markup.row(btn1, btn2)  # раставляем кнопки в ряду
 
     bot.send_message(message.chat.id, f'Здраствуй, {message.from_user.first_name},'
-                                      f' не желаешь ли чего-небудь выпить?',
+                                      f' не желаешь ли <b>чего-нибудь</b> выпить?', parse_mode='html',
                      reply_markup=markup)  # бот нам предлагаетвыбор ивыводит кнопки на экран
     bot.register_next_step_handler(message, get_alcohol)  # отпровляет бота на следующую функцию
 
@@ -45,11 +61,12 @@ def get_answer_alcohol(message):
         btn2 = types.KeyboardButton("Не молочный")
         markup.row(btn1, btn2)
         bot.reply_to(message, "Что ты предпочитаешь?", reply_markup=markup)
-        bot.register_next_step_handler(message,Not_alcohol)
+        bot.register_next_step_handler(message, Not_alcohol)
 
 
 def Strong_and_NotStrong_alcohol(message):
     markup = types.InlineKeyboardMarkup()
+
     if message.text == 'Крепкий':
         btn1 = types.InlineKeyboardButton("Манхетан", url='https://ru.inshaker.com/cocktails/38-manhetten')
         btn2 = types.InlineKeyboardButton('Зеленая фея', url='https://ru.inshaker.com/cocktails/408-zelenaya-feya')
@@ -92,29 +109,55 @@ def Strong_and_NotStrong_alcohol(message):
 def Not_alcohol(message):
     markup = types.InlineKeyboardMarkup()
     if message.text == 'Молочный':
-        btn1 = types.InlineKeyboardButton("Молочный коктейль", url='https://eda.ru/recepty/napitki/molochnij-koktejl-29064')
-        btn2 = types.InlineKeyboardButton('коктейль с бананом', url='https://eda.ru/recepty/napitki/molochnij-koktejl-s-bananom-37433')
-        btn3 = types.InlineKeyboardButton('Клубничный  коктейль', url='https://eda.ru/recepty/napitki/klubnichnij-molochnij-koktejl-28186')
-        btn4 = types.InlineKeyboardButton('Бананово  коктейль', url='https://eda.ru/recepty/napitki/bananovo-molochnyy-kokteyl-32264')
-        btn5 = types.InlineKeyboardButton('Вишневый  коктейль с какао', url='https://eda.ru/recepty/napitki/vishnevij-molochnij-koktejl-s-kakao-24138')
-        btn6 = types.InlineKeyboardButton('Коктейль с яблоком', url='https://eda.ru/recepty/napitki/molochnij-koktejl-s-jablokom-50206')
+        btn1 = types.InlineKeyboardButton("Молочный коктейль",
+                                          url='https://eda.ru/recepty/napitki/molochnij-koktejl-29064')
+        btn2 = types.InlineKeyboardButton('коктейль с бананом',
+                                          url='https://eda.ru/recepty/napitki/molochnij-koktejl-s-bananom-37433')
+        btn3 = types.InlineKeyboardButton('Клубничный  коктейль',
+                                          url='https://eda.ru/recepty/napitki/klubnichnij-molochnij-koktejl-28186')
+        btn4 = types.InlineKeyboardButton('Бананово  коктейль',
+                                          url='https://eda.ru/recepty/napitki/bananovo-molochnyy-kokteyl-32264')
+        btn5 = types.InlineKeyboardButton('Вишневый  коктейль с какао',
+                                          url='https://eda.ru/recepty/napitki/vishnevij-molochnij-koktejl-s-kakao-24138')
+        btn6 = types.InlineKeyboardButton('Коктейль с яблоком',
+                                          url='https://eda.ru/recepty/napitki/molochnij-koktejl-s-jablokom-50206')
         markup.row(btn1, btn2)
         markup.row(btn3, btn4)
         markup.row(btn5, btn6)
         bot.reply_to(message, "Может быть, тогда тебе понравится что-нибудь из этого🥤", reply_markup=markup)
 
     elif message.text == 'Не молочный':
-        btn1 = types.InlineKeyboardButton("Атланта",url='https://eda.ru/recepty/napitki/bezalkogolnij-koktejl-atlanta-45331')
-        btn2 = types.InlineKeyboardButton('Шмель',url='https://eda.ru/recepty/napitki/bezalkogolnij-koktejl-shmel-51661')
-        btn3 = types.InlineKeyboardButton('Стеклянная весна',url='https://eda.ru/recepty/napitki/bezalkogolnye-kokteyli-steklyannaya-vesna-92484')
-        btn4 = types.InlineKeyboardButton('Мохито безалкогольный',url='https://eda.ru/recepty/napitki/mohito-bezalkogolnij-28074')
-        btn5 = types.InlineKeyboardButton('Безалкогольный глинтвейн',url='https://eda.ru/recepty/napitki/bezalkogolnij-glintvejn-31015')
-        btn6 = types.InlineKeyboardButton('Безалкогольный апельсиново-клюквенный пунш',url='https://eda.ru/recepty/napitki/bezalkogolnij-apelsinovo-kljukvennij-punsh-20378')
+        btn1 = types.InlineKeyboardButton("Атланта",
+                                          url='https://eda.ru/recepty/napitki/bezalkogolnij-koktejl-atlanta-45331')
+        btn2 = types.InlineKeyboardButton('Шмель',
+                                          url='https://eda.ru/recepty/napitki/bezalkogolnij-koktejl-shmel-51661')
+        btn3 = types.InlineKeyboardButton('Стеклянная весна',
+                                          url='https://eda.ru/recepty/napitki/bezalkogolnye-kokteyli-steklyannaya-vesna-92484')
+        btn4 = types.InlineKeyboardButton('Мохито безалкогольный',
+                                          url='https://eda.ru/recepty/napitki/mohito-bezalkogolnij-28074')
+        btn5 = types.InlineKeyboardButton('Безалкогольный глинтвейн',
+                                          url='https://eda.ru/recepty/napitki/bezalkogolnij-glintvejn-31015')
+        btn6 = types.InlineKeyboardButton('Безалкогольный апельсиново-клюквенный пунш',
+                                          url='https://eda.ru/recepty/napitki/bezalkogolnij-apelsinovo-kljukvennij-punsh-20378')
         markup.row(btn1, btn2, btn3)
         markup.row(btn4)
         markup.row(btn5)
         markup.row(btn6)
         bot.reply_to(message, "Может быть, тогда тебе понравится что-нибудь из этого🥤", reply_markup=markup)
+
+@bot.message_handler(commands=['help'])
+def Help(message):
+    bot.send_message(message.chat.id,
+                     f"<b>Привет!👋 {message.from_user.first_name}</b>, этот бот поможет тебе выбрать напиток "
+                     f"для приятного время препровождения. "
+                     "Если хочешь <b>начать</b> напиши /go.", reply_markup='html')
+    bot.register_next_step_handler(message, go)
+
+@bot.message_handler()
+def shall_we_start(message):
+    bot.send_message(message.chat.id, 'Давай начнём с начала')
+    bot.register_next_step_handler(message, go)
+
 
 
 bot.polling(none_stop=True)
